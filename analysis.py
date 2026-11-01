@@ -56,7 +56,7 @@ plt.rcParams.update({
     "font.family": "sans-serif", "font.size": 9, "axes.edgecolor": BASE, "axes.labelcolor": INK2,
     "xtick.color": MUTED, "ytick.color": MUTED, "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6,
     "axes.spines.top": False, "axes.spines.right": False, "figure.facecolor": SURF, "axes.facecolor": SURF,
-    "legend.frameon": False, "axes.titlecolor": INK, "axes.titlesize": 10, "axes.titleweight": "bold",
+    "legend.frameon": False, "axes.axisbelow": True, "axes.titlecolor": INK, "axes.titlesize": 10, "axes.titleweight": "bold",
 })
 
 
