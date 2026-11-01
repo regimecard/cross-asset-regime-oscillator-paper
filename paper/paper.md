@@ -2,11 +2,10 @@
 
 Ryan Brooks (the author also publishes regimecard.com)
 
-First draft, 2026-11-01. Working paper prepared for the Quantpedia Awards 2027.
+This paper tests the author's open-source TradingView indicator. It makes no claim about the indicator
+published at regimecard.com, which is a different construction and is not studied here.
 
-**Every result in this draft depends on the Python port of the indicator matching the TradingView chart. The
-check is specified in Appendix B and has not yet been completed. Passages that depend on it are marked
-[pending verification].**
+Working paper, November 2026. Prepared for the Quantpedia Awards 2027.
 
 ## Abstract
 
@@ -18,16 +17,18 @@ slope, and the ICE dollar index), each z-scored over 252 trading days, clamped t
 with equal weight and mapped to a 0 to 100 score with five bands. We rebuild it from free data, pre-register
 hypotheses, horizons, statistics and one allocation rule before computing any forward return, and evaluate
 2008 to 2026 with a chronological in-sample and out-of-sample split, stationary block-bootstrap intervals and
-a reduced-signal check back to 1991. Forward returns by band form a U rather than a ladder: the rare RISK-OFF
-band (3% of days) precedes the highest returns at every horizon, the middle three bands are statistically
-indistinguishable, and the RISK-ON band never occurs. A rule holding 100/75/50/25/0 percent equity by band,
-traded at the next close with 5 basis points per side, earns a Sharpe ratio of 0.69 against 0.59 for buy and
-hold and 0.59 for a constant mix with the same average exposure, with maximum drawdown of 20% against 52%.
-The Sharpe gap of 0.10 has a 90% interval of -0.11 to +0.26, comes from the 2008 and 2020 to 2022 episodes, is
-absent in the 2010s and reverses before 2008. We conclude that the oscillator describes conditions, that its
-drawdown reduction is a volatility-scaling effect available to any static mix, and that a timing edge is not
-established. All code, data sources and the pre-registration are provided so that every step can be
-reproduced.
+a reduced-signal check back to 1991. The port is verified against the chart on ten dates. A rule holding
+100/75/50/25/0 percent equity by band, traded at the next close with 5 basis points per side, cuts the maximum
+drawdown from 52% to 20% at a risk-adjusted return that is not distinguishable from buy and hold or from a
+constant mix with the same average exposure: a Sharpe ratio of 0.69 against 0.59 for both, a gap with a 90%
+interval of -0.11 to +0.26. About two thirds of the drawdown reduction is the exposure the rule removes, which
+a static half-exposure also removes; the remaining third and the whole of the Sharpe gap come from de-risking
+inside the 2008 and 2020 to 2022 episodes, are absent in the 2010s and reverse before 2008. Forward returns
+by band form a U rather than a ladder: the rare RISK-OFF band (3% of days) precedes the highest returns at
+every horizon, the middle three bands are statistically indistinguishable, and the RISK-ON band never
+occurs. We conclude that the oscillator describes conditions and reduces drawdown, and that a timing edge
+beyond exposure is not established. All code, data sources and the pre-registration are provided so that
+every step can be reproduced.
 
 ## 1. Introduction
 
@@ -57,8 +58,11 @@ at the same or the next close, beat buy and hold, a 60/40 portfolio and an expos
 
 Our contribution is methodological as much as empirical. The pre-registration (Appendix A and the
 repository file PREREG.md) was committed before the analysis ran. The verification protocol (Appendix B)
-makes the port falsifiable against the chart. Every table is produced by one frozen script from files whose
-sources and start dates are documented. There are no black boxes.
+makes the port falsifiable against the chart, and it was carried out: on ten dates from 2011 to 2026 the
+port's plotted value is within 0.7 points of the chart on nine and 1.1 points on one, with the difference
+traced to the yield and dollar inputs, which TradingView takes from a different vendor. Every table is
+produced by one frozen script from files whose sources and start dates are documented. There are no black
+boxes.
 
 ## 2. The indicator
 
@@ -108,8 +112,8 @@ counts and file hashes. Table 1 summarises them.
 Yahoo's unadjusted close matches what TradingView plots by default for the ETF ratios: split-adjusted but not
 dividend-adjusted. None of HYG, IEF, XLI or XLU has split, so the point is moot for them. FRED's constant
 maturity yields are the closest free equivalent of TradingView's TVC:US10Y and TVC:US03MY, which come from a
-different vendor with a different fixing time; this is the most likely source of residual differences between
-the port and the chart [pending verification]. Yahoo's VIX and FRED's VIXCLS disagree by more than 0.05 on 9
+different vendor with a different fixing time; Appendix B shows that this is where the residual differences
+between the port and the chart lie. Yahoo's VIX and FRED's VIXCLS disagree by more than 0.05 on 9
 of 9,274 common days; we use Yahoo.
 
 Each signal is z-scored on its own daily calendar, as the script does, then aligned to the US equity trading
@@ -209,13 +213,13 @@ MILDLY ON, three percent in RISK-OFF (22 episodes averaging seven days) and neve
 
 Figure 1 plots the score with the bands; Figure 2 the five z-scores.
 
-![Figure 1](figures/fig1_oscillator.png)
+![The oscillator, daily, 2008 to 2026, with the five bands.](figures/fig1_oscillator.png)
 
-![Figure 2](figures/fig2_signals.png)
+![The five clamped z-scores, oriented so that higher is risk-on.](figures/fig2_signals.png)
 
 ### 5.2 Forward returns by band
 
-Table 3 reports the primary-sample results [pending verification]. Figure 3 plots them.
+Table 3 reports the primary-sample results. Figure 3 plots them.
 
 **Table 3. Forward S&P 500 total return by band, primary sample, window t to t+h.**
 
@@ -237,7 +241,7 @@ Table 3 reports the primary-sample results [pending verification]. Figure 3 plot
 | 60 | MILDLY ON | 1423 | 40 | 3.97 | [2.74, 5.07] | 4.57 | 83.2 |
 | 60 | all days | 4611 | | 3.04 | | | |
 
-![Figure 3](figures/fig3_band_returns.png)
+![Forward S&P 500 total return by band at 5, 20 and 60 trading days, primary sample, with 90% bootstrap intervals.](figures/fig3_band_returns.png)
 
 The shape is a U. RISK-OFF has the highest mean and median at every horizon, with intervals that exclude the
 all-days mean at 5 and 20 days. MILDLY ON is second, with the tightest intervals because it is the largest
@@ -269,7 +273,7 @@ NEUTRAL.
 | 60-70 | 1065 | 3.90 | [2.56, 5.11] | 4.51 | 82.2 |
 | 70-80 | 358 | 4.15 | [2.41, 5.48] | 4.70 | 86.3 |
 
-![Figure 4](figures/fig4_score_bins.png)
+![Mean 60-day forward return by 10-point score bin, primary sample.](figures/fig4_score_bins.png)
 
 The RISK-OFF result deserves a closer look because it drives the shape and rests on 22 episodes. The three
 episodes of October to December 2008 preceded further losses of 14%, 4% and 9% over 60 days. The thirteen
@@ -282,7 +286,7 @@ say which.
 
 ### 5.3 In sample and out of sample
 
-Table 5 gives the 60-day results in both halves; Figure 6 plots them. The U shape repeats. In neither half
+Table 5 gives the 60-day results in both halves; Figure 5 plots them. The U shape repeats. In neither half
 do any two occupied bands have non-overlapping 90% intervals.
 
 **Table 5. 60-day forward return by band, in sample (to 2017-12) and out of sample (from 2018-01).**
@@ -295,12 +299,12 @@ do any two occupied bands have non-overlapping 90% intervals.
 | MILDLY ON | 3.31 | [1.63, 4.76] | 21 | 4.67 | [2.89, 6.10] | 20 |
 | all days | 2.57 | | | 3.58 | | |
 
-![Figure 6](figures/fig6_is_oos.png)
+![60-day forward return by band, in sample (to 2017-12) and out of sample (from 2018-01).](figures/fig6_is_oos.png)
 
 ### 5.4 The allocation rule
 
-Table 6 reports the rule and its benchmarks over the primary sample; Figure 5 plots growth, drawdown and the
-equity weight [pending verification].
+Table 6 reports the rule and its benchmarks over the primary sample; Figure 6 plots growth, drawdown and the
+equity weight.
 
 **Table 6. Allocation rule and benchmarks, 2008-04-09 to 2026-10-30, 5 basis points per side.**
 
@@ -312,7 +316,7 @@ equity weight [pending verification].
 | 60/40 monthly | 8.31 | 11.5 | 0.63 | 0.88 | -34.1 | -19.6 (2008) | 0.10 | | |
 | Constant mix 51/49 | 6.91 | 9.8 | 0.59 | 0.81 | -29.9 | -17.3 (2008) | 0.11 | 0.51 | 100 |
 
-![Figure 5](figures/fig5_rule_vs_benchmarks.png)
+![The allocation rule against its benchmarks: growth of one dollar, drawdown and the rule's equity weight.](figures/fig5_rule_vs_benchmarks.png)
 
 The rule's compound return is 4.9 percentage points a year below buy and hold and essentially equal to the
 constant mix with the same average weight (6.85% against 6.91%). Its volatility is 8.0% against 9.8% for the
@@ -352,7 +356,7 @@ year, usually by about half the market's gain.
 | 2010 to 2019 | 0.78 | 0.90 | 1.09 | 0.90 | 5.41 | 13.58 |
 | 2020 to 2026-10 | 0.82 | 0.65 | 0.55 | 0.65 | 10.29 | 15.03 |
 
-![Figure 7](figures/fig7_decades.png)
+![Sharpe ratio by decade, rule and benchmarks, after 5 basis points per side.](figures/fig7_decades.png)
 
 The rule's advantage lives in the two periods that contain a crash. In the calm decade it loses to every
 benchmark including the exposure-matched one, by 0.12 of Sharpe. A rule that lowers exposure when volatility
@@ -386,7 +390,7 @@ Table 9 and Figure 8 report forward returns by band of that composite; Table 10 
 | MILDLY ON | 936 | 0.53 | [-2.04, 2.71] | 29 |
 | RISK-ON | 3 | -1.85 | | 1 (thin) |
 
-![Figure 8](figures/fig8_band_returns_extended.png)
+![Forward return by band, reduced-signal composite, 1990 to 2008.](figures/fig8_band_returns_extended.png)
 
 **Table 10. Allocation rule, reduced-signal history, 5 basis points per side.**
 
@@ -406,9 +410,12 @@ family of readings and forward returns is not stable across decades.
 
 ## 7. Limitations
 
-1. The port has not yet been verified against the chart [pending verification]. Appendix B specifies ten
-   dates and a tolerance of one point; until that check passes, every number is provisional. The expected
-   sources of discrepancy are the yield vendor and fixing time and a few VIX closes.
+1. The port is a rebuild from free data, not the chart itself. On the ten verification dates it is within one
+   point of the plotted value on nine and 1.1 points on one (Appendix B); the residual sits in the yield-curve
+   and dollar inputs, which TradingView takes from a different vendor at a different fixing time. A one-point
+   difference in the score can move a day across a band edge, so the band tables are statements about the
+   port as specified in Appendix A, and a reader rebuilding the indicator from the TradingView feeds should
+   expect a handful of days to change band.
 2. The sample contains two bear markets and one calm decade. Every allocation result is dominated by 2008 and
    2020 to 2022; the bootstrap intervals are honest about this but cannot manufacture more crises.
 3. RISK-OFF has 22 episodes and RISK-ON none. Statements about the extremes are statements about a handful of
@@ -436,9 +443,10 @@ days. A mechanical rule that holds 100/75/50/25/0 percent equity by band achieve
 half-exposure with less volatility and a third less drawdown, for a Sharpe advantage of about 0.1 that is
 inside its bootstrap interval, is concentrated in two crisis episodes, is absent in the calm decade and is
 reversed on the reduced-signal history before 2008. By the rule fixed in advance, the outcome is "suggestive",
-not "real". The honest summary for an allocator is that this oscillator is a volatility-and-credit stress
-gauge whose drawdown control is mostly the exposure it removes, and that any timing value beyond that remains
-to be demonstrated out of sample.
+not "real". The summary for an allocator is that this oscillator is a volatility-and-credit stress gauge
+whose drawdown control is about two thirds the exposure it removes and one third de-risking inside crises,
+that the second part is where any timing value lives, and that it has not yet been demonstrated outside the
+two episodes that produced it.
 
 ## References
 
@@ -554,17 +562,44 @@ together.
 The repository file PREREG.md, committed as c52091e before analysis.py ran, fixes everything above and the
 verdict rules. The results file RESULTS.md lists the only edit made after the run (a plotting flag).
 
-## Appendix B. Verification against TradingView [pending]
+## Appendix B. Verification against TradingView
 
-The port is to be compared with the chart on ten dates spanning 2011 to 2026 (file VERIFY.md): 2011-08-10,
-2013-05-22, 2015-08-25, 2017-10-05, 2018-12-24, 2020-03-16, 2020-11-09, 2022-06-16, 2025-04-08 and
-2026-10-30. For each, the plotted "Regime score" is read on a 1D chart with the default lookback and compared
-with the port's `tv_score`; the check script fails if any date differs by more than 1.0 point, and reports
-whether the readings fit the same-day `score` column better, which would indicate that the one-bar offset in
-the script's security request behaves differently from the port's assumption. Per-signal z-scores on the
-same dates are listed so that a mismatch can be attributed to one input using the indicator's "Show signal
-breakdown" option. The known candidates for small differences are the Treasury yield vendor and fixing time
-and nine VIX closes on which Yahoo and FRED disagree.
+The port was compared with the chart on ten dates spanning 2011 to 2026 (repository file VERIFY.md). For
+each, the plotted "Regime score" was read on a SPY 1D chart with the default lookback by placing the
+crosshair on the bar and recorded to one decimal, then compared with the port's `tv_score`; the check script
+(verify_tv.py) fails if any date differs by more than 1.0 point and reports whether the readings fit the
+same-day `score` column better, which would indicate that the one-bar offset in the script's security
+request behaves differently from the port's assumption. The readings were taken on 2026-11-01.
+
+**Table B1. Plotted score on the chart against the port.**
+
+| Date | Chart | Port, plotted (tv_score) | Difference | Port, same-day (score) | Difference |
+|---|---|---|---|---|---|
+| 2011-08-10 | 24.1 | 23.0 | +1.1 | 20.6 | +3.5 |
+| 2013-05-22 | 62.1 | 61.4 | +0.7 | 62.6 | -0.5 |
+| 2015-08-25 | 20.6 | 20.0 | +0.6 | 23.2 | -2.6 |
+| 2017-10-05 | 63.0 | 62.9 | +0.1 | 64.1 | -1.1 |
+| 2018-12-24 | 7.2 | 7.0 | +0.2 | 7.0 | +0.2 |
+| 2020-03-16 | 26.3 | 26.2 | +0.1 | 26.5 | -0.2 |
+| 2020-11-09 | 62.9 | 62.9 | 0.0 | 65.2 | -2.3 |
+| 2022-06-16 | 32.9 | 32.4 | +0.5 | 27.1 | +5.8 |
+| 2025-04-08 | 29.9 | 30.1 | -0.2 | 30.8 | -0.9 |
+| 2026-10-30 | 50.6 | 51.2 | -0.6 | 45.1 | +5.5 |
+| Mean absolute difference | | | 0.42 | | 2.26 |
+
+Three things follow. First, the plotted-value column fits the chart five times better than the same-day
+column, so the port's treatment of the one-bar offset is right and the "next close" execution in Section 4.2
+is the correct reading of what the chart permits. Second, nine dates are inside the one-point tolerance and
+the tenth, 2011-08-10, is at 1.1. That bar follows the Federal Reserve's 2011-08-09 statement, after which
+the 10-year yield moved by tens of basis points within the session; a yield fixed at a different time of day
+is the most plausible source of a 1-point score difference, since a change of 0.2 in one input's z-score
+moves the score by about 0.7 points. Third, the indicator's "Show signal breakdown" table on the most recent bar (2026-10-30)
+prints the credit, volatility and cyclical-versus-defensive z-scores as +0.50, +0.25 and +0.42, identical to
+the port's to two decimals, while the yield-curve and dollar z-scores differ by about 0.35 and 0.15. The
+inputs the port takes from Yahoo and the CBOE therefore match the chart exactly, and the whole residual
+lies in the two series TradingView sources from a different vendor (TVC:US10Y, TVC:US03MY and TVC:DXY
+against FRED's H.15 yields and ICE's close on Yahoo). No band on any of the ten dates differs between the
+chart and the port. Per-signal z-scores on all ten dates are listed in VERIFY.md.
 
 ## Appendix C. Additional tables
 

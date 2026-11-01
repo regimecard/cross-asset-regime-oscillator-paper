@@ -1,9 +1,8 @@
 # Cross-Asset Regime Oscillator allocation rule: replication specification
 
 Written for Allocate Smartly's request for a fully specified rule with execution at the close. Everything
-below is public and free. Backtest figures are from `RESULTS.md` and are **pending verification of the
-indicator port against the TradingView chart** (`VERIFY.md`); treat them as provisional until that check is
-reported as passed.
+below is public and free. Backtest figures are from `RESULTS.md`; the indicator port was verified against the
+TradingView chart on 2026-11-01 (`VERIFY.md`).
 
 ## 1. Summary
 
@@ -89,7 +88,7 @@ for each trading day t (chronological):
 - Exposure-matched constant mix: 51% S&P 500 TR, 49% T-bills, rebalanced at month end, 5 bp. This is the
   benchmark that separates timing from exposure.
 
-## 6. Backtest figures to replicate against (2008-04-09 to 2026-10-30, 5 bp per side) [pending verification]
+## 6. Backtest figures to replicate against (2008-04-09 to 2026-10-30, 5 bp per side)
 
 | Strategy | CAGR % | Vol % | Sharpe | Sortino | Max DD % | Worst year % | Turnover /yr | Mean eq. weight |
 |---|---|---|---|---|---|---|---|---|

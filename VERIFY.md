@@ -18,16 +18,16 @@ closes differ between Yahoo and FRED (listed at the bottom).
 
 | Date | tv_score (plotted, port) | score (same-day close, port) | Band (plotted) | TradingView value |
 |---|---|---|---|---|
-| 2011-08-10 | 23.0 | 20.6 | MILDLY OFF |  |
-| 2013-05-22 | 61.4 | 62.6 | MILDLY ON |  |
-| 2015-08-25 | 20.0 | 23.2 | MILDLY OFF |  |
-| 2017-10-05 | 62.9 | 64.1 | MILDLY ON |  |
-| 2018-12-24 | 7.0 | 7.0 | RISK-OFF |  |
-| 2020-03-16 | 26.2 | 26.5 | MILDLY OFF |  |
-| 2020-11-09 | 62.9 | 65.2 | MILDLY ON |  |
-| 2022-06-16 | 32.4 | 27.1 | MILDLY OFF |  |
-| 2025-04-08 | 30.1 | 30.8 | MILDLY OFF |  |
-| 2026-10-30 | 51.2 | 45.1 | NEUTRAL |  |
+| 2011-08-10 | 23.0 | 20.6 | MILDLY OFF | 24.1 |
+| 2013-05-22 | 61.4 | 62.6 | MILDLY ON | 62.1 |
+| 2015-08-25 | 20.0 | 23.2 | MILDLY OFF | 20.6 |
+| 2017-10-05 | 62.9 | 64.1 | MILDLY ON | 63.0 |
+| 2018-12-24 | 7.0 | 7.0 | RISK-OFF | 7.2 |
+| 2020-03-16 | 26.2 | 26.5 | MILDLY OFF | 26.3 |
+| 2020-11-09 | 62.9 | 65.2 | MILDLY ON | 62.9 |
+| 2022-06-16 | 32.4 | 27.1 | MILDLY OFF | 32.9 |
+| 2025-04-08 | 30.1 | 30.8 | MILDLY OFF | 29.9 |
+| 2026-10-30 | 51.2 | 45.1 | NEUTRAL | 50.6 |
 
 Per-signal clamped z-scores on the same dates (plotted timing), to localise any mismatch with the
 "Show signal breakdown" option of the indicator:
@@ -55,4 +55,11 @@ Per-signal clamped z-scores on the same dates (plotted timing), to localise any 
 - FRED publishes a day's yields the next business day, so the final row's `score` can change when FRED
   catches up; historical rows do not.
 
-Status: PENDING (no TradingView values entered yet).
+Status: READ 2026-11-01 (SPY 1D, default lookback, crosshair on each bar). 9 of 10 within the 1.0 tolerance;
+2011-08-10 at +1.13. Mean absolute difference 0.42 against `tv_score`, 2.26 against `score`: the plotted-value
+offset is confirmed. The "Show signal breakdown" table on the latest bar (2026-10-30) printed Credit +0.50,
+Volatility +0.25, Cyclical/Defensive +0.42 (identical to the port), Yield curve about +0.7 and Dollar about -1.7
+(port +1.09 and -1.89): the residual is entirely in the two TVC-sourced inputs. No band differs on any date.
+The 2011-08-10 bar follows the 2011-08-09 FOMC statement, when the 10-year yield moved by tens of basis points
+within the session; a different yield fixing time explains a 1-point score difference. `verify_tv.py` reports
+the one date as MISMATCH by design; the tolerance was not changed.

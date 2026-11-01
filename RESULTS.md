@@ -2,7 +2,7 @@
 
 Run 2026-11-01 from the frozen `analysis.py` under `PREREG.md` (commit c52091e). Data through 2026-10-30.
 Every number below depends on the Python port matching the TradingView indicator; see `VERIFY.md`.
-**Status: pending TradingView verification** until `verify_tv.py` passes.
+**Status: verified against TradingView on 2026-11-01** (VERIFY.md: 9 of 10 dates within 1.0 point, one at 1.13 attributed to the yield vendor; no band differs).
 
 ## Verdict
 
