@@ -1,5 +1,5 @@
 #!/bin/sh
-# Builds paper.pdf from paper.md. Run from research/oscillator-paper/paper. Needs pandoc and xelatex.
+# Builds paper.pdf from paper.md. Run from anywhere (it changes into its own directory). Needs pandoc and xelatex.
 set -e
 cd "$(dirname "$0")"
 pandoc paper.md -o paper.pdf --pdf-engine=xelatex \

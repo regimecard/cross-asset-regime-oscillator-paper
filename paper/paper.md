@@ -7,6 +7,8 @@ published at regimecard.com, which is a different construction and is not studie
 
 Working paper, November 2026. Prepared for the Quantpedia Awards 2027.
 
+Code and data: <https://github.com/regimecard/cross-asset-regime-oscillator-paper>
+
 ## Abstract
 
 We test whether a simple, fully public market-regime gauge carries information about forward S&P 500 returns
@@ -559,7 +561,7 @@ together.
 
 ### A.5 Pre-registration
 
-The repository file PREREG.md, committed as c52091e before analysis.py ran, fixes everything above and the
+The repository file PREREG.md, committed as f71fddf before analysis.py ran, fixes everything above and the
 verdict rules. The results file RESULTS.md lists the only edit made after the run (a plotting flag).
 
 ## Appendix B. Verification against TradingView
